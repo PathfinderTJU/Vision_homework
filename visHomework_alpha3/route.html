@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>路程规划</title>
+</head>
+
+<body>
+    <div class="main">
+        <div class="button-container">
+            <div class="button-group" id="start">
+            </div>
+            <div class="button-group" id="end">
+            </div>
+        </div>
+        <div class="record">
+            <span>source:<span id="source">未选中</span></span>&nbsp;&nbsp;<span>target:<span id="target">未选中</span></span>
+            <button id="add">添加</button>
+            <button id="jump">主页面</button>
+            <div id="add_tip"></div>
+            <div id="routes"></div>
+        </div>
+        <div class="router-generate">
+            <button value="aaa" id="route_generater">生成</button>
+            <button id="clear">清空</button>
+            <span id="generate_tip"></span>
+            <div id="router-container"></div>
+        </div>
+    </div>
+</body>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="./route.js"></script>
+<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- 包括所有已编译的插件 -->
+
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    
+    circle {
+        cursor: pointer;
+    }
+    
+    .main {
+        left: 600px;
+        position: absolute;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .button-container {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+    
+    #start {
+        border-right-style: solid;
+        border-width: 2px;
+        border-color: #ddd;
+        height: 300px;
+    }
+    
+    #end {
+        border-left-style: solid;
+        border-width: 2px;
+        border-color: #ddd;
+        height: 300px;
+    }
+    
+    .button-container {
+        height: 300px;
+        width: 420px;
+        border-bottom-style: solid;
+        border-width: 4px;
+        border-color: #ddd;
+    }
+    
+    .button-group {
+        padding: 20px 4px;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        width: 210px;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    button {
+        height: 24px;
+        width: 46px;
+        border-radius: 4px;
+        margin: 2px;
+        outline: none;
+    }
+    
+    .checked {
+        background-color: #204d74;
+        border-color: #122b40;
+    }
+    
+    .router-generate {
+        padding-top: 10px;
+        width: 400px;
+    }
+    
+    .record {
+        padding: 20px;
+    }
+    
+    #routes {
+        width: 200px;
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+</style>
+
+</html>

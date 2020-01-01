@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../lib/d3.js"></script>
+    <link type="text/css" rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <script>
+        var margin = {top: 10, right: 10, bottom: 10, left: 10};
+        var width = window.innerWidth - margin.right - margin.left;
+        var height = window.innerHeight - margin.top - margin.bottom;
+
+        d3.csv("../data/Gapminder_All_Time_Mean.csv", function (nations) {
+            var xScale = d3.scale.log()
+                .domain(d3.extent(nations, function (d) {
+                    return +d.GDP;
+                }))
+                .range([0, width]);
+
+            var yScale = d3.scale.linear()
+                .domain(d3.extent(nations, function (d) {
+                    return +d.LifeExp;
+                }))
+                .range([height, 0]);
+
+            var xAxis = d3.svg.axis()
+                .orient("top")
+                .scale(xScale)
+                .ticks(12, d3.format(", d"));
+
+            var yAxis = d3.svg.axis()
+                .orient("right")
+                .scale(yScale);
+
+            var colorScale = d3.scale.category10().domain(["Africa","Asia", "Australia", "Central America","Europe", "North America", "Oceania", "South America"]).range(['#00d5e9', '#ff5872', '#000080' , '#8A2BE2', '#FFC700', '#7feb00', '#ff00ff', '#8c510a']);
+
+            var radiusScale = d3.scale.sqrt()
+                .domain(d3.extent(nations.map(function (d) {
+                    return +d.Population;
+                })))
+                .range([0, 40]);
+
+            var regionScale = d3.scale.ordinal().domain(["Africa","Asia", "Australia", "Central America","Europe", "North America", "Oceania", "South America"]).range(["A1","A2", "A3", "C1","E1", "N1", "O1", "S1"]);
+
+            var svg = d3.select("body").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+            svg.append("g").attr("class", "axis")
+                .attr("transform", "translate(0," + (height) + ")")
+                .call(xAxis);
+
+            svg.append("g").attr("class", "axis")
+                // .attr("transform", "translate(10, 0)")
+                .call(yAxis);
+
+            // Add x-text
+            svg.append("text")
+                .attr("id", "x_label")
+                .attr("text-anchor", "end")
+                .attr("x", width)
+                .attr("y", height - 25)
+                .text("Income per Person in US Dollars (log scale)");
+
+            // Add y-text
+            svg.append("text")
+                .attr("id", "y_label")
+                .attr("text-anchor", "end")
+                .attr("y", 25)
+                .attr("dy", "0.75em")
+                .attr("transform", "rotate(-90)")
+                .text("Life Expectancy in Years");
+
+            // Add Year Label
+            svg.append("text")
+                .attr("id", "year_label")
+                .attr("text-anchor", "end")
+                .style("font-size", 100)
+                .attr("x", width)
+                .attr("y", height - 39)
+                .text(1990);
+
+            // draw bubbles
+            var dot = svg.append("g").attr("class", "dots")
+                .selectAll(".dot")
+                .data(interpolateData(nations, 1990))
+                .enter().append("circle")
+                .attr("class", function(d){ return "dot " + regionScale(d.Region) })
+                .style("fill", function(d){ return colorScale(d.Region)})
+                .call(position)
+                .sort(order);
+
+            svg.transition()
+                .duration(10000)
+                .ease("linear")
+                .tween("year", tweenYear);
+
+            function position(dot){
+                // change the position of bubbles and their radius, labels
+                dot.attr("cx", function(d){return xScale(+d.GDP)})
+                    .attr("cy", function(d){return yScale(+d.LifeExp)})
+                    .attr("r", function(d){return radiusScale(+d.Population)})
+                    .append("title")
+                    .text(function(d){return d.Country + "\nGDP: " + d.GDP + "\nLifeExp: " + d.LifeExp})
+            }
+
+            function tweenYear(){
+                var year = d3.interpolateNumber(1900,2015);
+                return function(t) { update(year(t)); };
+            }
+
+            function interpolateData(nations, year){
+                // filter data in that year
+                return nations.filter(function(a){return a.Year == year});
+            }
+
+            // update views based on year
+            function update(year){
+                var rounded_year = Math.round(year);
+                // update year label
+                d3.select("#year_label").text(rounded_year);
+                // update label text
+                d3.selectAll(".dot").text(function(d){return d.Country + "\nGDP: " + d.GDP + "\nLifeExp: " + d.LifeExp});
+                // update bubbles
+                d3.selectAll(".dot").data(interpolateData(nations, rounded_year), key).call(position).sort(order);
+
+            }
+
+            d3.selectAll(".dot")
+                .on("mouseover", function (d) {
+                    d3.selectAll(".dot").style("opacity", 0.3);
+                    d3.select(this).style("opacity", 1);
+                })
+                .on("mouseout", function (d) {
+                    d3.selectAll(".dot").style("opacity", 1);
+                })
+        });
+
+        function order(a, b) {
+            return b.Population - a.Population;
+        }
+
+        function key(d) { return d.Country; }
+    </script>
+</body>
+</html>

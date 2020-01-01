@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Title</title>
+        <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="js/d3.v5.min.js"></script>
+    </head>
+    <body>    
+        <div>
+            <form >
+                <label for="name" class="label">模式：</label>
+                <select class="form-control" id="select">
+                        <option value="5" selected="selected">5月</option>
+                        <option value="6">6月</option>
+                        <option value="7">7月</option>
+                        <option value="8">8月</option>
+                        <option value="9">9月</option>
+                        <option value="10">10月</option>
+                </select>
+            </form>
+        </div>
+        <style>
+            body {
+                height: 700px;
+                width: 1000px;
+            }
+            #select{
+                margin-left: 60px ;
+                width: 20%;
+            }
+            #explain{
+                font-family: "Monotype Corsiva", "Apple Chancery", "URW Chancery L", cursive;
+                font-size: 20px;
+            }
+        </style>
+        <script>
+            var margin = { left: 80, top: 50, right: 100, bottom: 30 };
+            // var width = 750;
+            // var height = 260;
+            var width = document.documentElement.clientWidth - 20;
+            var height = 500;
+
+            const keys = ['龙华区', '美兰区', '琼山区', '秀英区'];
+            const groupKey = 'Date';
+            const periods = ['morning', 'midday', 'evening'];
+            const opacity = [1, 0.8, 0.6];
+            const yText = '数值';
+
+            const color = d3.scaleOrdinal().range(['#98abc5', '#7b6888', '#a05d56', '#ff8c00'])
+
+            var svg = d3
+                .select('body')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            const legend = svg => {
+                const g = svg
+                    .attr('transform', `translate(${width},0)`)
+                    .attr('text-anchor', 'end')
+                    .attr('font-family', 'sans-serif')
+                    .attr('font-size', 10)
+                    .selectAll('g')
+                    .data(color.domain().slice())
+                    .join('g')
+                    .attr('transform', (d, i) => `translate(0,${i * 20})`);
+
+                g.append('rect')
+                    .attr('x', -19)
+                    .attr('width', 19)
+                    .attr('height', 19)
+                    .attr('fill', color);
+
+                g.append('text')
+                    .attr('x', -24)
+                    .attr('y', 9.5)
+                    .attr('dy', '0.35em')
+                    .text(d => d)
+            };
+
+            const xAxis = svg.append("g")
+                .attr("id", "xAxis")
+                .attr('transform', `translate(0,${height - margin.bottom})`);
+
+            const  yAxis = svg.append("g")
+                .attr("id", "yAxis")
+                .attr('transform', `translate(${margin.left},0)`);
+
+
+            const render = (selectMonth)=>{
+                d3.json(`data/${selectMonth}.json`).then(function(jsonData) {
+                console.log(jsonData);
+                const records = jsonData.recorders;
+                // 有可能有变动
+
+                const data = records.map((record, k) => ({
+                    Date: `${jsonData.month}/${k + 1}`,
+                    ...Object.fromEntries(
+                        keys.map((key, i) => [
+                            key,
+                            periods.map((name, j) => ({
+                                name,
+                                Time: record[i][j],
+                            })),
+                        ]),
+                    ),
+                }));
+
+                console.log(data);
+
+                const x0 = d3
+                    .scaleBand()
+                    .domain(data.map(d => d[groupKey]))
+                    .rangeRound([margin.left, width - margin.right])
+                    .paddingInner(0.1);
+
+                const x1 = d3
+                    .scaleBand()
+                    .domain(keys)
+                    .rangeRound([0, x0.bandwidth()])
+                    .padding(0.05);
+
+                const y = d3
+                    .scaleLinear()
+                    .domain([0, d3.max(data, d => d3.max(keys, key => d3.sum(d[key], x => x.Time)))])
+                    .nice()
+                    .rangeRound([height - margin.bottom, margin.top]);
+
+                xAxis
+                    .transition()
+                    .call(d3.axisBottom(x0).tickSizeOuter(0))
+                    .call(() => xAxis.select('.domain').remove());
+
+                yAxis
+                    .transition()
+                    .call(d3.axisLeft(y).ticks(null, 's'))
+                    .call(() => yAxis.select('.domain').remove());
+                    // .call(g =>
+                    //         g
+                    //             .select('.tick:last-of-type text')
+                    //             .clone()
+                    //             .attr('x', 3)
+                    //             .attr('text-anchor', 'start')
+                    //             .attr('font-weight', 'bold')
+                    //             .text(yText),
+                    //     );
+
+                svg.append('g')
+                    .selectAll('g')
+                    .data(data)
+                    .join('g')
+                    .attr('transform', d => `translate(${x0(d[groupKey])},0)`)
+                    .selectAll('g')
+                    .data(d => keys.map(key => ({ key, value: d[key] })))
+                    .join('g')
+                    .selectAll('rect')
+                    .data(
+                        d =>
+                            periods.reduce(
+                                (front, period, i) => {
+                                    const value = d.value[i].Time;
+                                    front.acc += value;
+                                    front.arr.push({ period: i, key: d.key, value, acc: front.acc });
+                                    return front
+                                },
+                                { acc: 0, arr: [] },
+                            ).arr,
+                    )
+                    .join('rect')
+                    .attr("id", "bar")
+                    .attr('x', d => x1(d.key))
+                    .attr('y', d => y(d.acc))
+                    .attr('width', x1.bandwidth())
+                    .attr('height', 0)
+                    .transition()
+                    .attr('height', d => y(d.acc - d.value) - y(d.acc))
+                    .attr('fill', d => color(d.key))
+                    .attr('fill-opacity', d => opacity[d.period]);
+
+                // svg.append('g').transition().call(xAxis);
+                //
+                // svg.append('g').transition().call(yAxis);
+
+                svg.append('g').call(legend)
+            })
+            };
+
+            const freshMt = ()=>{
+                let month = parseInt($("#select option:selected").val());
+
+                d3.selectAll("#bar")
+                    .transition()
+                    .attr('height', 0)
+                    .remove();
+
+                render(month);
+            };
+            
+            d3.select("#select")
+            .on("change",()=>{
+                freshMt();
+            });
+
+            freshMt();
+        </script>
+    <div id="explain"><center>注:stack图中自下而上分别为一天中的早中晚的乘车记录总数</center></div>
+    </body>
+</html>

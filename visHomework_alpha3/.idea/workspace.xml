@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d7e8e9ab-cbc0-483d-b245-3ee62254f953" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1Swk1ANu2HvV0YsXS8VqbfpTRVf" />
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pcp-v1.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\99542\WebstormProjects\visHomework" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.index.html">
+    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/visHomework/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="divlayout.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="divlayout.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <configuration name="weather.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="weather.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.index.html" />
+        <item itemvalue="Node.js.weather.js" />
+        <item itemvalue="Node.js.divlayout.js" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d7e8e9ab-cbc0-483d-b245-3ee62254f953" name="Default Changelist" comment="" />
+      <created>1572481827344</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1572481827344</updated>
+      <workItem from="1572481828929" duration="5069000" />
+      <workItem from="1572531955191" duration="437000" />
+      <workItem from="1572591860096" duration="1102000" />
+      <workItem from="1572787228864" duration="4038000" />
+      <workItem from="1572791342120" duration="23643000" />
+      <workItem from="1572851858894" duration="4550000" />
+      <workItem from="1572856990573" duration="1022000" />
+      <workItem from="1573229517419" duration="33000" />
+      <workItem from="1574061911486" duration="1214000" />
+      <workItem from="1574069772320" duration="27000" />
+      <workItem from="1574085585932" duration="6826000" />
+      <workItem from="1574137058586" duration="43000" />
+      <workItem from="1574137109260" duration="36000" />
+      <workItem from="1574137164339" duration="3451000" />
+      <workItem from="1574255726494" duration="5320000" />
+      <workItem from="1574296299465" duration="15000" />
+      <workItem from="1574606862681" duration="617000" />
+      <workItem from="1575006636239" duration="11159000" />
+      <workItem from="1575087305510" duration="6921000" />
+      <workItem from="1575465295731" duration="8477000" />
+      <workItem from="1575507063254" duration="3000" />
+      <workItem from="1575558887733" duration="5293000" />
+      <workItem from="1575853213711" duration="3213000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+</project>
